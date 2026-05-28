@@ -1,0 +1,6 @@
+if SHIELD_ROCK_TOUCH_V1
+
+config ZMK_KEYBOARD_NAME
+    default "RockTouchV1"
+
+endif # SHIELD_ROCK_TOUCH_V1

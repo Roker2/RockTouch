@@ -1,0 +1,13 @@
+file_format: "1"
+id: rock_touch_v1
+name: RockTouchV1
+type: shield
+
+url: https://github.com/Roker2/RockTouch
+
+features:
+  - keys
+  - pointing
+
+requires:
+  - pro_micro
