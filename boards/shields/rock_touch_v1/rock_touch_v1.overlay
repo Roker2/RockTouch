@@ -1,50 +1,47 @@
-// This file was generated from a template. Edit it to match your keyboard.
-// See https://zmk.dev/docs/development/hardware-integration/new-shield for more
-// instructions.
-
-#include <dt-bindings/zmk/matrix_transform.h>
-
-#include "rock_touch_v1-layouts.dtsi"
+// RockTouch V1 — Azoteq IQS5XX trackpad on nice!nano v2.
+// I2C (board default via &pro_micro_i2c): SDA P0.17, SCL P0.20.
 
 / {
     chosen {
-        zmk,physical-layout = &default_layout;
+        zmk,kscan = &mock_kscan;
+        zmk,matrix-transform = &empty_transform;
     };
 
-    kscan: kscan {
-        // If the hardware does not use a switch matrix, change this to the
-        // appropriate driver and update the properties below to match.
-        // See https://zmk.dev/docs/config/kscan for supported key scan drivers.
-        compatible = "zmk,kscan-gpio-matrix";
-        // Set this to "col2row" or "row2col" to match the hardware. If using
-        // "row2col", change the col-gpios to (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)
-        // and the row-gpios to GPIO_ACTIVE_HIGH.
-        diode-direction = "col2row";
-        wakeup-source;
-
-        // Replace these comments with the GPIO pins in the matrix.
-        // See https://zmk.dev/docs/development/hardware-integration/new-shield#shield-overlays
-        col-gpios
-            = <&pro_micro 0 GPIO_ACTIVE_HIGH>
-            , <&pro_micro 0 GPIO_ACTIVE_HIGH>
-            ;
-
-        row-gpios
-            = <&pro_micro 0 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-            , <&pro_micro 0 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-            ;
+    mock_kscan: mock_kscan {
+        compatible = "zmk,kscan-mock";
+        columns = <0>;
+        rows = <0>;
+        events = <0>;
     };
 
-    default_transform: default_transform {
-        // See https://zmk.dev/docs/development/hardware-integration/new-shield#matrix-transform
-        // for how to configure this
+    empty_transform: empty_transform {
         compatible = "zmk,matrix-transform";
-        columns = <2>;
-        rows = <2>;
+        columns = <0>;
+        rows = <0>;
+        map = <>;
+    };
 
-        map = <
-            RC(0, 0) RC(0, 1)
-            RC(1, 0) RC(1, 1)
-        >;
+    trackpad_listener {
+        compatible = "zmk,input-listener";
+        device = <&trackpad>;
+    };
+};
+
+&pro_micro_i2c {
+    status = "okay";
+
+    trackpad: iqs5xx@74 {
+        compatible = "azoteq,iqs5xx";
+        reg = <0x74>;
+        status = "okay";
+
+        rdy-gpios = <&gpio0 9 GPIO_ACTIVE_HIGH>;   /* P0.09 / D10 */
+        reset-gpios = <&gpio0 10 GPIO_ACTIVE_LOW>; /* P0.10 / D16 */
+
+        one-finger-tap;
+        two-finger-tap;
+        press-and-hold;
+        scroll;
+        flip-x;
     };
 };

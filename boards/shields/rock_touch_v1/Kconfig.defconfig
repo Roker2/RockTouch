@@ -3,4 +3,13 @@ if SHIELD_ROCK_TOUCH_V1
 config ZMK_KEYBOARD_NAME
     default "RockTouchV1"
 
+config ZMK_POINTING
+    default y
+
+config INPUT
+    default y
+
+config I2C
+    default y
+
 endif # SHIELD_ROCK_TOUCH_V1
